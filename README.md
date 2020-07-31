@@ -19,6 +19,13 @@ To run the code:
 
 ```python3 main.py```
 
+Also, download the 'wiki-news-300d-1M.vec' from fastext and store it in folder 'clu-exp'
+
+## Setup python env
+
+- conda create -n cluwords_env pip
+- conda activate cluwords_env
+- pip install -r requirements.txt
 
 ### Cite
 If you find this code useful in your research, please, consider citing our paper:
@@ -31,3 +38,5 @@ booktitle={The Twelfth ACM International Conference on Web Search and Data Minin
 year={2019},
 organization={ACM}
 }```
+
+

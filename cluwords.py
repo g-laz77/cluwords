@@ -43,7 +43,7 @@ class Cluwords:
 
     """
 
-    def __init__(self, algorithm, embedding_file_path, n_words, k_neighbors, threshold=.85, n_jobs=1, verbose=0):
+    def __init__(self, algorithm, embedding_file_path, n_words, k_neighbors, threshold=.85, n_jobs=1, path_to_save_results=None, verbose=0):
         if verbose:
             print('K: {}'.format(k_neighbors))
             print('Cossine: {}'.format(threshold))
@@ -51,14 +51,17 @@ class Cluwords:
         if algorithm == 'knn_cosine':
             print('kNN...')
             knn = AlfaKnn(threshold=threshold,
-                          n_threads=n_jobs)
+                          n_threads=n_jobs,
+                          path_to_save_results=path_to_save_results)
             knn.create_cosine_cluwords(input_vector_file=embedding_file_path,
                                        n_words=n_words,
                                        k_neighbors=k_neighbors)
         elif algorithm == 'knn_mahalanobis':
             print('kNN Mahalanobis...')
             knn = AlfaKnn(threshold=threshold,
-                          n_threads=n_jobs)
+                          n_threads=n_jobs,
+                          path_to_save_results=path_to_save_results)
+
             knn.create_mahalanobis_cluwords(input_vector_file=embedding_file_path,
                                             n_words=n_words,
                                             k_neighbors=k_neighbors)
@@ -113,10 +116,11 @@ class CluwordsTFIDF:
         self.dataset_file_path = dataset_file_path
         self.path_to_save_cluwords_tfidf = path_to_save_cluwords + '/cluwords_features.libsvm'
         self.n_words = n_words
+        self.path_to_save_cluwords = path_to_save_cluwords
         self.cluwords_tf_idf = None
         self.cluwords_idf = None
         self.cossine_filter = cossine_filter
-        loaded = np.load('cluwords.npz')
+        loaded = np.load('{}/cluwords.npz'.format(self.path_to_save_cluwords))
         self.vocab = loaded['index']
         self.vocab_cluwords = loaded['cluwords']
         self.cluwords_data = loaded['data']

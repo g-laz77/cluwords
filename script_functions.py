@@ -12,12 +12,12 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.feature_extraction.text import CountVectorizer
 
 
-def _nearest_neighbors(X_topic, X_raw, vocab, n_topics, dataset):
+def _nearest_neighbors(path_to_save_results, X_topic, X_raw, vocab, n_topics, dataset):
     X = _raw_tf(X_raw, vocab, binary=True)
     neigh = NearestNeighbors(n_neighbors=n_topics, algorithm='auto', metric='cosine')
     neigh.fit(X_topic)
     dist, ind = neigh.kneighbors(X)
-    output = open('document_distribution_{}'.format(dataset), 'w')
+    output = open('{}/document_distribution_{}'.format(path_to_save_results, dataset), 'w')
     for doc in range(0, dist.shape[0]):
         topic_dist = np.zeros(dist.shape[1])
         for index in range(0, dist.shape[1]):
@@ -39,7 +39,7 @@ def _raw_tf(documents, vocab, binary=False):
     return tf
 
 
-def get_one_hot_topics(topics, top, vocab, dataset):
+def get_one_hot_topics(path_to_save_results, topics, top, vocab, dataset):
     one_hot_topics = []
     for topic in topics:
         topic_top = topic[:top]
@@ -51,7 +51,7 @@ def get_one_hot_topics(topics, top, vocab, dataset):
         one_hot_topics.append(one_hot_topic)
 
     one_hot_topics = np.array(one_hot_topics)
-    np.savez_compressed('one_hot_topics_{}.npz'.format(dataset),
+    np.savez_compressed('{}/one_hot_topics_{}.npz'.format(path_to_save_results, dataset),
                         one_hot=one_hot_topics)
     return one_hot_topics
 
@@ -106,7 +106,7 @@ def print_results(cluwords_freq, cluwords_docs, path_to_save_results, topics, n_
             for topic in topics:
                 topics_t.append(topic[:t])
                 for word in topic[:t]:
-                    f_res.write('{} '.format(word))
+                    f_res.write('{}, '.format(word))
 
                 f_res.write('\n')
 
@@ -193,7 +193,7 @@ def generate_topics(dataset, word_count, path_to_save_model, datasets_path,
                     has_class, class_path, n_components, algorithm_type):
     # Path to files and directories
     embedding_file_path = """{}/{}.txt""".format(path_to_save_model, dataset)
-    dataset_file_path = """{}/{}Pre.txt""".format(datasets_path, dataset)
+    dataset_file_path = """{}/{}/Pre.txt""".format(datasets_path, dataset)
     path_to_save_results = '{}/{}'.format(path_to_save_results, dataset)
 
     try:
@@ -206,7 +206,8 @@ def generate_topics(dataset, word_count, path_to_save_model, datasets_path,
              n_words=word_count,
              k_neighbors=k,
              threshold=threshold,
-             n_jobs=n_threads
+             n_jobs=n_threads,
+             path_to_save_results=path_to_save_results
              )
 
     cluwords = CluwordsTFIDF(dataset_file_path=dataset_file_path,
@@ -255,8 +256,8 @@ def generate_topics(dataset, word_count, path_to_save_model, datasets_path,
                                                                         vocab_cluwords,
                                                                         cluwords_tfidf.transpose())
     topics = parse_topics(topics)
-    one_hot_topics = get_one_hot_topics(topics, 101, np.array(vocab_cluwords), dataset)
-    _nearest_neighbors(one_hot_topics, documents, vocab_cluwords, n_components, dataset)
+    one_hot_topics = get_one_hot_topics(path_to_save_results, topics, 101, np.array(vocab_cluwords), dataset)
+    _nearest_neighbors(path_to_save_results, one_hot_topics, documents, vocab_cluwords, n_components, dataset)
     topics = remove_redundant_words(topics)
 
     # Remove variable

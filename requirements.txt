@@ -1,0 +1,9 @@
+scipy
+numpy
+gensim
+scikit-learn
+fasttext
+pandas
+pyjarowinkler
+matplotlib
+seaborn

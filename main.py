@@ -1,38 +1,25 @@
 from script_functions import create_embedding_models, generate_topics
 import os
-DATASETS = {
-    '20News': 29442,
-    'acm': 16333,
-    'ang': 1903,
-    'drop': 2427,
-    'ever': 6296,
-    'face': 5152,
-    'info': 6061,
-    'pinter': 2058,
-    'trip': 3147,
-    'tweets': 8002,
-    'uber': 5504,
-    'wpp': 1775
-}
 
 # wpp_slice_2 11
 # wpp_slice 31
 
 # Paths and files paths
-MAIN_PATH='/mnt/d/Work'
+MAIN_PATH='./clu-exp'
 # EMBEDDING_RESULTS = 'fasttext_wiki_mahalanobis'
 EMBEDDING_RESULTS = 'fasttext_wiki'
 PATH_TO_SAVE_RESULTS = '{}/cluwords/{}/results'.format(MAIN_PATH, EMBEDDING_RESULTS)
 PATH_TO_SAVE_MODEL = '{}/cluwords/{}/datasets/gn_w2v_models'.format(MAIN_PATH, EMBEDDING_RESULTS)
-DATASETS_PATH = '/mnt/d/Dropbox/Felipe/UFMG/cluwords_topic_modeling/bases'
+DATASETS_PATH = './datasets'
 # DATASETS_PATH = '/mnt/d/Work/textual_datasets'
-CLASS_PATH = '/mnt/d/Dropbox/Felipe/UFMG/cluwords_topic_modeling/bases/textual_topic_datasets/acm_so_score_Pre'
+# CLASS_PATH = '/mnt/d/Dropbox/Felipe/UFMG/cluwords_topic_modeling/bases/textual_topic_datasets/acm_so_score_Pre'
 HAS_CLASS = False
+CLASS_PATH = ""
 # EMBEDDINGS_FILE_PATH = '{}/GoogleNews-vectors-negative300.bin'.format(MAIN_PATH)
 # EMBEDDINGS_BIN_TYPE = True
 EMBEDDINGS_FILE_PATH = '{}/wiki-news-300d-1M.vec'.format(MAIN_PATH)
 EMBEDDINGS_BIN_TYPE = False
-DATASET = 'webkb_full'
+DATASET = 'gousto'
 N_THREADS = 6
 N_COMPONENTS = 7
 # ALGORITHM_TYPE = 'knn_mahalanobis'
@@ -40,10 +27,11 @@ ALGORITHM_TYPE = 'knn_cosine'
 
 # Creates directories if they don't exist
 try:
+    os.mkdir('{}/cluwords'.format(MAIN_PATH))
     os.mkdir('{}/cluwords/{}'.format(MAIN_PATH, EMBEDDING_RESULTS))
-    os.mkdir('{}/cluwords/{}/results'.format(MAIN_PATH, EMBEDDING_RESULTS))
+    os.mkdir(PATH_TO_SAVE_RESULTS)
     os.mkdir('{}/cluwords/{}/datasets'.format(MAIN_PATH, EMBEDDING_RESULTS))
-    os.mkdir('{}/cluwords/{}/datasets/gn_w2v_models'.format(MAIN_PATH, EMBEDDING_RESULTS))
+    os.mkdir(PATH_TO_SAVE_MODEL)
 except FileExistsError:
     pass
 

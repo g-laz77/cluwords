@@ -87,7 +87,7 @@ class CreateEmbeddingModels:
         print('Embedding model read in %0.3fs.' % (time() - t0))
 
     def _read_raw_dataset(self, document_path, dataset):
-        arq = open(document_path + '/' + str(dataset) + 'Pre.txt', 'r')
+        arq = open(document_path + '/' + str(dataset) + '/Pre.txt', 'r')
         doc = arq.readlines()
         arq.close()
         documents = list(map(str.rstrip, doc))

@@ -16,9 +16,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 class AlfaKnn:
-    def __init__(self, threshold, n_threads):
+    def __init__(self, threshold, n_threads, path_to_save_results):
         self.threshold = threshold
         self.n_threads = n_threads
+        self.path_to_save_results = path_to_save_results
         print('N Threads: {}'.format(self.n_threads))
 
     def _mem_usage(self, pandas_obj):
@@ -120,7 +121,7 @@ class AlfaKnn:
                 for i, k in enumerate(indices[p]):
                     list_cluwords[p][k] = round(1 - distances[p][i], 2)
 
-        np.savez_compressed('cluwords.npz',
+        np.savez_compressed('{}/cluwords.npz'.format(self.path_to_save_results),
                             data=list_cluwords,
                             index=np.asarray(labels_array),
                             cluwords=np.asarray(labels_array))
